@@ -261,6 +261,31 @@ async function fetchLatestReview()
   }
 }
 
+//Posts review to omdb
+async function postReviewToAPI(reviewDto) {
+  try {
+    const response = await fetch(`https://grupp6.dsvkurs.miun.se/api/movies/review`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(reviewDto),
+    });
+
+    if (response.ok) {
+      console.log(`Recensionen har sparats.`);
+      return true; 
+    } else {
+      console.error("Något blev fel. Recensionen kunde inte sparas.");
+      alert('Recensionen kunde inte sparas. Försök igen senare.');
+      return false; 
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    return false;
+  }
+}
+
 //Gets reviews from API
 async function getReviews(imdbID) {
   let url = cmdbBaseUrl + endpoints.getMovies + imdbID;
@@ -306,3 +331,4 @@ export {fetchSingleMovieData};
 export {fetchMovieRating}
 export {rateMovie};
 export {getReviews};
+export {postReviewToAPI};

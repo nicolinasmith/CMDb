@@ -1,4 +1,4 @@
-import {fetchSingleMovieData, fetchMovieRating, getReviews, fetchCmdbTopList} from './api.js';
+import {fetchSingleMovieData, fetchMovieRating, getReviews, fetchCmdbTopList, postReviewToAPI} from './api.js';
 
 let cachedMovieID = null;
 let imdbID = await getImdbID();
@@ -141,13 +141,13 @@ if (hasSubmittedReview(imdbID)) {
   reviewInput.setAttribute("disabled", true);
 }
 
-//Posts review to API 
+// Funktion för att posta recensionen
 async function postReview(imdbID, author, review) {
+
   let selectedScore = null;
   const clickedButton = document.querySelector('.buttons button.clicked');
   if (clickedButton) {
     selectedScore = parseInt(clickedButton.getAttribute('data-score'));
-    console.log(`Betygknapp: ${selectedScore} har valts.`);
   } else {
     console.log('Inget betyg är valt');
     alert("Välj ett betyg!");
@@ -160,32 +160,16 @@ async function postReview(imdbID, author, review) {
     "score": selectedScore,
     "review": review,
   };
-  console.log(reviewDto);
 
-  fetch(`https://grupp6.dsvkurs.miun.se/api/movies/review`, {
-    method: "POST",
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(reviewDto),
-  })
-  .then(async (response) => {
-    if (response.ok) {
-      console.log(`Recensionen har sparats.`);
-      setReviewedCookie(imdbID);
-      updateAfterReview();
-      await updateMovieRating(imdbID)
-      let reviews = await getReviews(imdbID);
-      displayReviews(reviews);
-    } else {
-      console.error("Något blev fel. Recensionen kunde inte sparas.");
-      alert('Recensionen kunde inte sparas. Försök igen senare.');
-      throw new Error("API request failed");
-    }
-  })
-  .catch((error) => {
-    console.error("Error:", error);
-  });
+  const reviewPosted = await postReviewToAPI(reviewDto);
+
+  if (reviewPosted) {
+    setReviewedCookie(imdbID);
+    updateAfterReview();
+    await updateMovieRating(imdbID);
+    let reviews = await getReviews(imdbID);
+    displayReviews(reviews);
+  }
 }
 
 //Gives user feedback during input of review text.
@@ -217,7 +201,8 @@ function displayReviews(reviews) {
     noReviewsMessage.textContent = 'Bli först att recensera och betygsätta!';
     reviewsContainer.appendChild(noReviewsMessage);
   } else {
-    reviews.sort((a, b) => new Date(b.date) - new Date(a.date));
+    reviews.sort((a, b) => new Date(a.date) - new Date(b.date));
+    reviews.reverse();
 
     let reviewCount = reviews.length;
     const reviewsHeader = document.getElementById('reviews-header');
@@ -290,9 +275,9 @@ function displayReviews(reviews) {
     
       buttonContainer.appendChild(prevPageButton);
       buttonContainer.appendChild(nextPageButton);
-    paginationContainer.appendChild(buttonContainer);
-    paginationContainer.appendChild(textPaging);
-    paginationAdded = true;
+      paginationContainer.appendChild(buttonContainer);
+      paginationContainer.appendChild(textPaging);
+      paginationAdded = true;
     }
   }
 }

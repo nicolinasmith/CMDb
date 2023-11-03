@@ -19,6 +19,8 @@ await createMovieList(fullMovieData);
 const latestReviews = [];
 getLatestReview();
 
+askForCookieConsent();
+
 //Creates movie objects with data from cmdb and omdb
 async function createFullMovieData(cmdbList, omdbData) {
 
@@ -178,6 +180,17 @@ function inActivateRatingButtons(imdbID) {
       btn.style.opacity = 0.2;
       btn.style.cursor = 'default';
   });
+}
+
+//Asks for cookie consent
+function askForCookieConsent() {
+  const consent = localStorage.getItem('cookieConsent');
+  if (!consent) {
+      const consentMessage = "Vi använder cookies för att förbättra din upplevelse på vår webbplats. Genom att använda vår webbplats godkänner du användningen av cookies. Läs vår integritetspolicy för mer information.";
+      if (confirm(consentMessage)) {
+          localStorage.setItem('cookieConsent', 'true');
+      }
+  }
 }
 
 //Sets cookie with 1 day expiry

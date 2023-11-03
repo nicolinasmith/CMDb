@@ -417,9 +417,6 @@ img:hover {
     width: 90%;
 }
 
-.latest-review-design p {
-    margin: 10px;
-}
 
 /*CONTACT*/
 .contact-container {
@@ -817,6 +814,7 @@ input[type="text"], textarea {
 
 .pagination {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     margin-top: 10px;
