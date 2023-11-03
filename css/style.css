@@ -761,6 +761,22 @@ input[type="checkbox"] {
 
 .reviews, .specific-film-content {
     width: 90%;
+} 
+
+.review-design {
+    padding: 10px;
+    text-align: left;
+    padding: 10px;
+    background-color: rgb(220, 216, 216);
+    color: black;
+    border: #b66014 2px solid;
+    border-radius: 10px;
+    margin: 15px;
+    align-items: center;
+}
+
+.review-design p {
+    margin: 10px;
 }
 
 .reviews {
@@ -820,14 +836,6 @@ button#prevPage:hover, button#nextPage:hover {
     background-color: #e09e34;
 }
 
-.author {
-    margin-bottom: 8px;
-}
-
-.review-text {
-    padding-bottom: 4px;
-}
-
 #review {
     width: 100%;
     min-height: 100px;
@@ -842,18 +850,8 @@ button#prevPage:hover, button#nextPage:hover {
     text-align: right;
 }
 
-.review-container {
-    border: 1px solid #b66014;
-    padding: 10px;
-    margin: 6px;
-}
-
 .write-review { 
     flex: 2;
-}
-
-.write-review {
-    max-height: 690px;
 }
 
 input[type="text"]:disabled, textarea:disabled {

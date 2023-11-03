@@ -5,10 +5,8 @@ const searchButton = document.getElementById('search-button');
 const searchCommentElement = document.getElementById('search-result');
 const searchElement = document.getElementById('search-hits');
 const searchHeadline = document.getElementById('search-headline');
-const searchBar = document.getElementById('search-bar');
 const searchSuggestions = document.getElementById('search-suggestions');
 searchHeadline.style.display = 'none';
-searchBar.style.display = 'none';
 let searchSuggestionsVisible = false;
 let newSearchIsMade = false;
 

@@ -1,4 +1,5 @@
-import {fetchSingleMovieData, fetchMovieRating, getReviews} from './api.js';
+import {fetchSingleMovieData, fetchMovieRating, getReviews, fetchCmdbTopList} from './api.js';
+
 let cachedMovieID = null;
 let imdbID = await getImdbID();
 let movie = await fetchSingleMovieData(imdbID);
@@ -14,6 +15,7 @@ async function getImdbID() {
   const url = window.location.search;
   const searchParams = new URLSearchParams(url);
   let imdbID = searchParams.get("imdbID");
+
   if (!imdbID) {
     imdbID = await getDefaultMovieID();
   }
@@ -22,30 +24,16 @@ async function getImdbID() {
 
 //Gets the highest ratest movie from toplist as a default movie
 async function getDefaultMovieID() {
+
 if (cachedMovieID !== null) {
   return cachedMovieID;
   }
 
-  const baseURLcmdb = 'https://grupp6.dsvkurs.miun.se/api/toplists?';
-  let url = baseURLcmdb + new URLSearchParams(
-    {sort: 'DESC', limit: 1, page: 1, countLimit:2}
-  )
+  const fetchTopMovieParam = "toplists?sort=DESC&limit=1&page=1&countLimit=2";
+  const result = await fetchCmdbTopList(fetchTopMovieParam);
+  const topMovie = result[0];
+  return topMovie.imdbID;
 
-  try {
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch data. Status: ${response.status}`);
-    }
-    let defaultMovie = await response.json();
-    let defaultMovieID = defaultMovie['movies'][0].imdbID;
-    cachedMovieID = defaultMovieID;
-    console.log(defaultMovie['movies'][0].imdbID)
-    return defaultMovieID;
-
-  } catch (error) {
-    console.error('Error:', error);
-  }
 }
 
 //Displays selected movie in UI
@@ -59,7 +47,6 @@ function displayMovie(movie) {
   const director = document.getElementById("director")
   const actors = document.getElementById("actors")
   const imdbRating = document.getElementById("imdb-rating")
-
 
   poster.src = (movie.poster === 'N/A') ? './img/no-poster.jpg' : movie.poster;
   poster.alt = (movie.poster === 'N/A') ? 'Omslagsbild för film' : `Omslagsbild för: ${movie.title}`;
@@ -230,22 +217,18 @@ function displayReviews(reviews) {
     noReviewsMessage.textContent = 'Bli först att recensera och betygsätta!';
     reviewsContainer.appendChild(noReviewsMessage);
   } else {
-    reviews.sort((a, b) => new Date(a.date) - new Date(b.date));
-    reviews.reverse();
+    reviews.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    const reviewsHeader = document.querySelector(".reviews-header");
     let reviewCount = reviews.length;
-    const countReviews = document.createElement('p');
-    countReviews.textContent = `${reviewCount} stycken`;
-    reviewsHeader.removeChild(reviewsHeader.lastChild)
-    reviewsHeader.appendChild(countReviews);
+    const reviewsHeader = document.getElementById('reviews-header');
+    reviewsHeader.textContent = `Recensioner (${reviewCount} stycken):`;
 
-    //Displaying first page of 10 as default.
-    displayPageofReviews(reviews.slice(0, 10));
+    displayPageofReviews(reviews.slice(0, 3));
+
     const paginationContainer = document.querySelector('.pagination');
+    const buttonContainer = document.createElement('div');
 
-    //Displaying paging buttons if there are more than 10 reviews
-    if(reviews.length > 10 && !paginationAdded) {
+    if(reviews.length > 4 && !paginationAdded) {
       const prevPageButton = document.createElement('button');
       prevPageButton.id = 'prevPage';
       prevPageButton.textContent = 'Föregående';
@@ -253,11 +236,19 @@ function displayReviews(reviews) {
       const nextPageButton = document.createElement('button');
       nextPageButton.id = 'nextPage';
       nextPageButton.textContent = 'Nästa';
+
+      const textPaging = document.createElement('p');
+      paginationContainer.appendChild(textPaging);
     
       let currentPage = 1;
-      let pageLength = 10
+      let pageLength = 3;
       let start = currentPage-1
       let end = currentPage * pageLength
+
+      if (currentPage = 1) {
+        prevPageButton.disabled = true;
+        prevPageButton.style.opacity = 0.2;
+      }
     
       prevPageButton.addEventListener('click', () => {
         if (currentPage > 1) {
@@ -265,26 +256,48 @@ function displayReviews(reviews) {
           start = (currentPage - 1) * pageLength;
           end = currentPage * pageLength;
           displayPageofReviews(reviews.slice(start, end));
+          textPaging.textContent = `Sida ${currentPage} av ${Math.ceil(reviews.length / 4)}`;
         }
+
+        nextPageButton.disabled = false;
+        nextPageButton.style.opacity = 1;
       });
     
       nextPageButton.addEventListener('click', () => {
-        if (currentPage < Math.ceil(reviews.length / 10)) {
+        if (currentPage < Math.ceil(reviews.length / 3)) {
           currentPage++;
           start = (currentPage - 1) * pageLength;
           end = currentPage * pageLength;
           displayPageofReviews(reviews.slice(start, end));
+          textPaging.textContent = `Sida ${currentPage} av ${Math.ceil(reviews.length / 3)}`;
+        }
+
+        if (currentPage === Math.ceil(reviews.length / 3)) {
+          nextPageButton.disabled = true;
+          nextPageButton.style.opacity = 0.2;
+        }
+
+        if (currentPage > 1)
+        {
+          prevPageButton.disabled = false;
+          prevPageButton.style.opacity = 1;
         }
       });
 
-    paginationContainer.appendChild(prevPageButton);
-    paginationContainer.appendChild(nextPageButton);
+      
+      textPaging.textContent = `Sida ${currentPage} av ${Math.ceil(reviews.length / 3)}`;
+
+    
+      buttonContainer.appendChild(prevPageButton);
+      buttonContainer.appendChild(nextPageButton);
+    paginationContainer.appendChild(buttonContainer);
+    paginationContainer.appendChild(textPaging);
     paginationAdded = true;
     }
   }
 }
 
-//Creates and displays HTML-elements for each subset of 10 from reviews array
+//Creates and displays HTML-elements for each subset of 3 from reviews array
 function displayPageofReviews(reviews) {
   const reviewsContainer = document.querySelector(".reviews-container");
 
@@ -294,17 +307,12 @@ function displayPageofReviews(reviews) {
 
   reviews.forEach(review => {
     const reviewContainer = document.createElement('div');
-    reviewContainer.classList.add('review-container');
-    const authorElement = document.createElement('h4');
-    authorElement.classList.add('author');
+    const authorElement = document.createElement('p');
     const dateElement = document.createElement('p');
-    dateElement.classList.add('review-text');
-    const ratingElement = document.createElement('h5');
-    ratingElement.classList.add('review-text');
+    const ratingElement = document.createElement('p');
     const reviewElement = document.createElement('p');
-    reviewElement.classList.add('review-text');
 
-    authorElement.textContent = `Namn: ${review.author}`;
+    authorElement.textContent = `Cineast: ${review.author}`;
     dateElement.textContent = `Datum: ${review.date}`;
     ratingElement.textContent = `Betyg: ${review.score}`;
     reviewElement.textContent = `Recension: ${review.review}`;
@@ -314,6 +322,7 @@ function displayPageofReviews(reviews) {
     reviewContainer.appendChild(ratingElement);
     reviewContainer.appendChild(reviewElement);
     reviewsContainer.appendChild(reviewContainer);
+    reviewContainer.classList.add('review-design');
   });
 }
 
