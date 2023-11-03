@@ -1,0 +1,90 @@
+<!DOCTYPE html> 
+<html lang="sv">
+<head>
+    <title>Cineasterna - Start</title>
+    <link type="text/css" rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="keywords" content="HTML, CSS, JavaScript">
+    <meta name="viewport" content="width-device-width, initial-scale=1.0">
+    <script type="module" src="./js/index.js"></script>
+    <script type="module" src="./js/global-functions.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>Cineasterna</h1>
+</header>
+
+<nav tabindex="0">
+    <ul class="nav-li">
+        <li><a href="index.html#headlines" class="current">Start</a></li>
+        <li><a href="search.html#headlines">Sök</a></li>
+        <li><a href="film.html#headlines">Film</a></li>
+        <li><a href="contact.html#headlines">Om oss</a></li>
+    </ul>
+
+    <div id="search-bar">
+        <input type="text" id="search-bar-input" placeholder="Sök efter filmer">
+        <div id="search-bar-suggestions"></div>
+    </div>
+</nav>
+
+<div id="headlines">
+    <h1>CMDb: Cineasternas filmklubb</h1>
+</div>
+
+<button id="scrollToTopButton">Upp &#9650;</button>
+
+<div class="flex-container">
+    <h1 id="main-headline">Topplistan</h1>
+    
+    <section class="movies" id="top"></section>
+    <section class="movies" id="rest">
+        <div id="movie-list">
+            <div id="more-films"></div> 
+            <div class="button-container">
+                <button id="paging-button" class="button-design">Visa fler filmer</button>
+            </div>
+        </div>   
+    </section>
+        <aside class="aside">
+        <div id="aside-content">
+            <div class="section" id="aside-review">
+                <h4>Senaste recensionen på CMDb</h4>
+                <div id="latest-review"></div>
+                <button id="latest-review-button" class="button-design">Se mer om filmen</button>
+            </div>
+            <div class="section" id="news">
+                <h4>Senaste nyheterna på CMDb</h4>
+                <p><a href="#">CMDB expanderar med exklusiva visningar av kultklassiker!</a></p>
+                <p><a href="#">Nya temanätter på CMDB - upptäck dina favoritgenrer!</a></p>
+                <p><a href="#">Unika medlemsförmåner: CMDB erbjuder exklusiva filmsamlingar!</a></p>
+            </div>
+            <div class="section" id="aside-buttons">
+                <h4>Annat roligt</h4>
+                <button class="button-design" id="kalkon-button">Se kalkonlistan</button>
+                <button class="button-design">Webshop</button>
+                <button class="button-design">Hitta din närmsta biograf</button>
+            </div>
+        </div>
+    </aside>
+</div>
+
+<footer>
+    <a href="index.html" id="logo-image">
+        <img src="img/logo.jpg" alt="Bild på logotyp" width="150" height="150">
+    </a>
+    <div class="footer">
+        <p>KONTAKTA OSS</p>
+    <ul>
+        <li><a href="contact.html">Kontakta oss</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Instagram</a></li>
+    </ul>
+    </div>
+</footer>
+
+</body>
+
+</html>

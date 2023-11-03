@@ -1,0 +1,153 @@
+<!DOCTYPE html> 
+<html lang="sv">
+<head>
+    <title>Cineasterna - Sök</title>
+    <link type="text/css" rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="keywords" content="HTML, CSS, JavaScript">
+    <meta name="viewport" content="width-device-width, initial-scale=1.0">
+    <script type="module" src="./js/search.js"></script>
+    <script type="module" src="./js/global-functions.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>Cineasterna</h1>
+</header>
+
+<nav tabindex="0">
+    <ul class="nav-li">
+        <li><a href="index.html#headlines">Start</a></li>
+        <li><a href="search.html#headlines" class="current">Sök</a></li>
+        <li><a href="film.html#headlines">Film</a></li>
+        <li><a href="contact.html#headlines">Om oss</a></li>
+    </ul>
+
+</nav>
+
+<div id="headlines">
+    <h1>CMDb: Cineasternas filmklubb</h1>
+</div>
+
+<button id="scrollToTopButton">Upp &#9650;</button>
+
+<main class="search-container section">
+
+    <section class="main-search">
+        <h2>Sök efter film:</h2>
+        <input type="text" id="search-box" name="searchbox">
+        <div id="search-suggestions"></div>
+        <button id="search-button" class="button-design">Sök</button>
+            
+        <div class="filter">
+            <h3>Filtrera sökningen:</h3>
+            <div class="checkbox">
+                <div class="length">
+                    <p>Årtal:</p>
+                    <div class="c">
+                        <input type="checkbox" id="checkbox70">
+                        <label for="checkboxShort">1970-talet -</label>
+                    </div>
+                    <div class="c">
+                        <input type="checkbox" id="checkbox80">
+                        <label for="checkboxMedium">1980-talet</label>
+                    </div>
+                    <div class="c">
+                        <input type="checkbox" id="checkbox90">
+                        <label for="checkboxLong">1990-talet</label>
+                    </div>
+                    <div class="c">
+                        <input type="checkbox" id="checkbox00">
+                        <label for="checkboxLong">2000-talet</label>
+                    </div>
+                    <div class="c">
+                        <input type="checkbox" id="checkbox10">
+                        <label for="checkboxLong">2010-talet +</label>
+                    </div>
+                </div>
+                <div class="genre">
+                    <p>Genre:</p>
+                    <div class="c">
+                        <input type="checkbox" id="checkboxHorror">
+                        <label for="checkboxHorror">Skräck</label>
+                    </div>
+                    <div class="c">
+                        <input type="checkbox" id="checkboxComedy">
+                        <label for="checkboxComedy">Komedi</label>
+                    </div>
+                    <div class="c">
+                        <input type="checkbox" id="checkboxFantasy">
+                        <label for="checkboxFantasy">Fantasy</label>
+                    </div>
+                    <div class="c">
+                        <input type="checkbox" id="checkboxAction">
+                        <label for="checkboxAction">Action</label>
+                    </div>
+                    <div class="c">
+                        <input type="checkbox" id="checkboxAdventure">
+                        <label for="checkboxAdventure">Äventyr</label>
+                    </div>
+                </div>
+                
+                <div class="score">
+                    <p>CMDb Score:</p>
+                    <div class="c">
+                        <input type="checkbox" id="checkboxLow">
+                        <label for="checkboxShort">0-1</label>
+                    </div>
+                    <div class="c">
+                        <input type="checkbox" id="checkboxMediumLow">
+                        <label for="checkboxMediumLow">1-2</label>
+                    </div>
+                    <div class="c">
+                        <input type="checkbox" id="checkboxMediumHigh">
+                        <label for="checkboxMediumHigh">2-3</label>
+                    </div>
+                    <div class="c">
+                        <input type="checkbox" id="checkboxHigh">
+                        <label for="checkboxHigh">3-4</label>
+                    </div>
+                </div>
+                <div class="length">
+                    <p>Speltid:</p>
+                    <div class="c">
+                        <input type="checkbox" id="checkboxShort">
+                        <label for="checkboxShort">0-59 minuter</label>
+                    </div>
+                    <div class="c">
+                        <input type="checkbox" id="checkboxMedium">
+                        <label for="checkboxMedium">60-119 minuter</label>
+                    </div>
+                    <div class="c">
+                        <input type="checkbox" id="checkboxLong">
+                        <label for="checkboxLong">119+ minuter</label>
+                    </div>
+                </div>                
+            </div>
+        </div>   
+    </section>
+
+    <div class="result">
+        <h2 id="search-headline">Sökresultat</h2>
+        <i id="search-result"></i>
+        <div id="search-hits"></div>
+
+    </div>
+</main>
+
+<footer>
+    <a href="index.html" id="logo-image">
+        <img src="img/logo.jpg" alt="Bild på logotyp" width="150" height="150">
+    </a>
+    <div class="footer">
+        <p>KONTAKTA OSS</p>
+    <ul>
+        <li><a href="contact.html">Kontakta oss</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Instagram</a></li>
+    </ul>
+    </div>
+</footer>
+
+</body>
