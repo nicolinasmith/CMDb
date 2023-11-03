@@ -215,11 +215,10 @@ function displayReviews(reviews) {
 
     if(reviews.length > 4 && !paginationAdded) {
       const prevPageButton = document.createElement('button');
-      prevPageButton.id = 'prevPage';
-      prevPageButton.textContent = 'Föregående';
-    
       const nextPageButton = document.createElement('button');
+      prevPageButton.id = 'prevPage';
       nextPageButton.id = 'nextPage';
+      prevPageButton.textContent = 'Föregående';
       nextPageButton.textContent = 'Nästa';
 
       const textPaging = document.createElement('p');
@@ -241,11 +240,15 @@ function displayReviews(reviews) {
           start = (currentPage - 1) * pageLength;
           end = currentPage * pageLength;
           displayPageofReviews(reviews.slice(start, end));
-          textPaging.textContent = `Sida ${currentPage} av ${Math.ceil(reviews.length / 4)}`;
-        }
+          textPaging.textContent = `Sida ${currentPage} av ${Math.ceil(reviews.length / 3)}`;
 
-        nextPageButton.disabled = false;
-        nextPageButton.style.opacity = 1;
+          nextPageButton.disabled = false;
+          nextPageButton.style.opacity = 1;
+        }
+        if (currentPage === 1) {
+          prevPageButton.disabled = true;
+          prevPageButton.style.opacity = 0.2;
+        }
       });
     
       nextPageButton.addEventListener('click', () => {
@@ -256,23 +259,18 @@ function displayReviews(reviews) {
           displayPageofReviews(reviews.slice(start, end));
           textPaging.textContent = `Sida ${currentPage} av ${Math.ceil(reviews.length / 3)}`;
         }
-
         if (currentPage === Math.ceil(reviews.length / 3)) {
           nextPageButton.disabled = true;
           nextPageButton.style.opacity = 0.2;
         }
-
         if (currentPage > 1)
         {
           prevPageButton.disabled = false;
           prevPageButton.style.opacity = 1;
         }
       });
-
       
       textPaging.textContent = `Sida ${currentPage} av ${Math.ceil(reviews.length / 3)}`;
-
-    
       buttonContainer.appendChild(prevPageButton);
       buttonContainer.appendChild(nextPageButton);
       paginationContainer.appendChild(buttonContainer);
